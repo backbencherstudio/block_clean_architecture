@@ -15,7 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (success) {
           emit(AuthAuthenticated());
         } else {
-          emit(AuthError('Invalid credentials'));
+          emit(AuthError('Invalid credentials not login'));
         }
       } catch (e) {
         debugPrint('login faield with error $e');
