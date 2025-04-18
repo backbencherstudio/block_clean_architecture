@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 
 import '../../data/network/network_api_services.dart';
@@ -14,16 +13,20 @@ class AuthHttpApiRepository implements AuthApiRepository {
   @override
   Future<bool> login(String email, String password) async {
     try {
-      final response = await _apiServices.postApi(
-        AppUrl.loginUrl,
-        {'username': email, 'password': password},
-      );
+      final response = await _apiServices.postApi(AppUrl.loginUrl, {
+        'username': email,
+        'password': password,
+      });
+
       debugPrint('Login response: $response');
-      return response['success'] == true;
+      if (response['accessToken'] != null) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       debugPrint('Login failed: $e');
       rethrow;
     }
   }
-
 }
