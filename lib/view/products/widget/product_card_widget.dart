@@ -19,18 +19,18 @@ class ProductCardWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
         leading: CachedNetworkImage(
-          imageUrl: '',
+          imageUrl: product.image,
           width: 50,
           height: 50,
           placeholder: (context, url) => const CircularProgressIndicator(),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
         title: Text(
-        "  product.title",
+         product.title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
-        subtitle: Text('product}'),
+        subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
         onTap: onTap,
       ),
     );

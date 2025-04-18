@@ -17,19 +17,15 @@ class AuthHttpApiRepository implements AuthApiRepository {
         'username': email,
         'password': password,
       });
-      debugPrint('Login response repository: $response');
 
-      debugPrint('status code: ${response.statusCode}');
-
-      if (response['accessToken' !=  '']) {
+      debugPrint('Login response: $response');
+      if (response['accessToken'] != null) {
         return true;
       } else {
-        debugPrint('Login failed: ${response.statusCode}');
         return false;
       }
     } catch (e) {
       debugPrint('Login failed: $e');
-      return false;
       rethrow;
     }
   }
