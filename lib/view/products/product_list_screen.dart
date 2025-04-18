@@ -6,24 +6,35 @@ import 'package:go_router/go_router.dart';
 import '../../block/product_bloc/product_bloc.dart';
 import '../../block/product_bloc/product_events.dart';
 import '../../block/product_bloc/product_states.dart';
+import '../../block/theme_cubit/theme_cubit.dart';
 import '../../components/loading_widget.dart';
-
-
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
+        backgroundColor: theme.appBarTheme.backgroundColor,
         actions: [
+          // 🌙 Light/Dark Mode Switch
+          Switch(
+            value: isDark,
+            onChanged: (value) {
+              context.read<ThemeCubit>().toggleTheme(value);
+            },
+          ),
           IconButton(
-            icon: const Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart, color: theme.iconTheme.color),
             onPressed: () => context.go('/cart'),
           ),
         ],
       ),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductInitial) {
@@ -44,7 +55,9 @@ class ProductListScreen extends StatelessWidget {
               },
             );
           } else if (state is ProductError) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Text(state.message, style: theme.textTheme.bodyMedium),
+            );
           }
           return const SizedBox();
         },
