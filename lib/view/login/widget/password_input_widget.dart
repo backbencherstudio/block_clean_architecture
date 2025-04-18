@@ -10,7 +10,7 @@ class PasswordInputWidget extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: true,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Password',
         border: OutlineInputBorder(),
       ),
