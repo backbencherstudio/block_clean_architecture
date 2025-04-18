@@ -9,11 +9,11 @@ class EmailInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      keyboardType: TextInputType.emailAddress,
-      decoration: const InputDecoration(
-        labelText: 'Email',
+      decoration: InputDecoration(
+        labelText: 'User Name',
         border: OutlineInputBorder(),
       ),
+      keyboardType: TextInputType.emailAddress,
     );
   }
 }
