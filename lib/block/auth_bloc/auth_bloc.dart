@@ -12,17 +12,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       try {
         final success = await _repository.login(event.email, event.password);
-        debugPrint('Login successful $success');
         if (success) {
-          debugPrint('Login successful $success');
           emit(AuthAuthenticated());
         } else {
-          debugPrint('Login fail');
-          throw Exception('Invalid credentials');
+          emit(AuthError('Invalid credentials'));
         }
       } catch (e) {
-        debugPrint('Login faile $e');
-        emit(AuthError(e.toString()));
+        debugPrint('login faield with error $e');
+        emit(AuthError('Login failed: ${e.toString()}'));
       }
     });
   }
