@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+
 import '../../block/block_post/block_post_block.dart';
 import '../../block/block_post/block_post_event.dart';
 import '../../block/block_post/block_post_state.dart';
 import '../../model/block_post/block_post_model.dart';
 
-class PostListScreen extends StatelessWidget {
-  const PostListScreen({super.key});
+class BlockPostList extends StatelessWidget {
+  const BlockPostList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class PostListScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.pop(); // Correct way to pop with go_router
+            Navigator.pop(context); // Navigate back to the previous screen
           },
         ),
       ),

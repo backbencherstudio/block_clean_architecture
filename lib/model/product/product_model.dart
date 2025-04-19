@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'product_model.g.dart'; // এই লাইনটা খুব গুরুত্বপূর্ণ
+part 'product_model.g.dart';
 
 @JsonSerializable()
 class ProductModel {

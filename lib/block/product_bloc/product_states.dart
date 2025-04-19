@@ -1,4 +1,3 @@
-
 import '../../model/product/product_model.dart';
 
 abstract class ProductState {}
