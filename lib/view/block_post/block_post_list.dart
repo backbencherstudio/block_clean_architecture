@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../block/block_post/block_post_block.dart';
 import '../../block/block_post/block_post_event.dart';
@@ -18,7 +19,7 @@ class BlockPostList extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            context.pop();  // Correct way to pop with go_router
           },
         ),
       ),

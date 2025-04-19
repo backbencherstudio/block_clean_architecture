@@ -16,7 +16,7 @@ class AppRouter {
       ),
       GoRoute(
         path: RoutesName.productList,
-        builder: (context, state) => const PostListScreen(),
+        builder: (context, state) => const ProductListScreen(),
       ),
       GoRoute(
         path: '/product/:id',
