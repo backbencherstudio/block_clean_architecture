@@ -1,77 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_block/view/products/widget/product_card_widget.dart';
 import 'package:go_router/go_router.dart';
-import '../../block/block_post/block_post_block.dart';
-import '../../block/block_post/block_post_event.dart';
-import '../../block/block_post/block_post_state.dart';
-import '../../model/block_post/block_post_model.dart';
 
-class PostListScreen extends StatelessWidget {
-  const PostListScreen({super.key});
+import '../../block/product_bloc/product_bloc.dart';
+import '../../block/product_bloc/product_events.dart';
+import '../../block/product_bloc/product_states.dart';
+import '../../block/theme_cubit/theme_cubit.dart';
+import '../../components/loading_widget.dart';
+
+class ProductListScreen extends StatelessWidget {
+  const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add a post and show'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.pop(); // Correct way to pop with go_router
-          },
-        ),
+        title: const Text('Products'),
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        actions: [
+          IconButton(
+            onPressed: () => context.go('/postBlock'),
+            icon: Icon(Icons.app_blocking),
+          ),
+          // 🌙 Light/Dark Mode Switch
+          Switch(
+            value: isDark,
+            onChanged: (value) {
+              context.read<ThemeCubit>().toggleTheme(value);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.shopping_cart, color: theme.iconTheme.color),
+            onPressed: () => context.go('/cart'),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Dummy Post Add
-          final post = PostModel(
-            id: DateTime.now().millisecondsSinceEpoch,
-            title: "New Post",
-            body: "Body text",
-          );
-          context.read<PostBloc>().add(AddPost(post));
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: BlocBuilder<PostBloc, PostState>(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
-          if (state is PostLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is PostLoaded) {
+          if (state is ProductInitial) {
+            context.read<ProductBloc>().add(FetchProducts());
+            return const LoadingWidget();
+          } else if (state is ProductLoading) {
+            return const LoadingWidget();
+          } else if (state is ProductLoaded) {
             return ListView.builder(
-              itemCount: state.posts.length,
+              padding: const EdgeInsets.all(8.0),
+              itemCount: state.products.length,
               itemBuilder: (context, index) {
-                final post = state.posts[index];
-                return ListTile(
-                  title: Text(post.title),
-                  subtitle: Text(post.body),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          final updatedPost = PostModel(
-                            id: post.id,
-                            title: "Edited ${post.title}",
-                            body: post.body,
-                          );
-                          context.read<PostBloc>().add(UpdatePost(updatedPost));
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          context.read<PostBloc>().add(DeletePost(post.id));
-                        },
-                      ),
-                    ],
-                  ),
+                final product = state.products[index];
+                return ProductCardWidget(
+                  product: product,
+                  onTap: () => context.push('/product/${product.id}'),
                 );
               },
             );
+          } else if (state is ProductError) {
+            return Center(
+              child: Text(state.message, style: theme.textTheme.bodyMedium),
+            );
           }
-          return const Center(child: Text("No Posts"));
+          return const SizedBox();
         },
       ),
     );
